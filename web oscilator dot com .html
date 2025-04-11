@@ -1,0 +1,136 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta http-equiv="Content-Style-Type" content="text/css">
+  <title></title>
+  <meta name="Generator" content="Cocoa HTML Writer">
+  <meta name="CocoaVersion" content="2113.4">
+  <style type="text/css">
+    p.p1 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica}
+    p.p2 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica; min-height: 14.0px}
+  </style>
+</head>
+<body>
+<p class="p1">&lt;!DOCTYPE html&gt;</p>
+<p class="p1">&lt;html lang="en"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;head&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;meta charset="UTF-8" /&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;title&gt;Animated Background Website&lt;/title&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;!-- Include the p5.js and p5.sound libraries --&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/p5.min.js"&gt;&lt;/script&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/addons/p5.sound.min.js"&gt;&lt;/script&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;style&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>/* Remove default margins/padding */</p>
+<p class="p1"><span class="Apple-converted-space">      </span>html, body {</p>
+<p class="p1"><span class="Apple-converted-space">        </span>margin: 0;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>padding: 0;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>overflow: hidden;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>height: 100%;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>background-color: #000;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>font-family: Arial, sans-serif;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>}</p>
+<p class="p1"><span class="Apple-converted-space">      </span>/* This will style the p5.js canvas to cover the full screen and stay fixed behind content */</p>
+<p class="p1"><span class="Apple-converted-space">      </span>#defaultCanvas0 {</p>
+<p class="p1"><span class="Apple-converted-space">        </span>position: fixed;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>top: 0;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>left: 0;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>z-index: -1;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>}</p>
+<p class="p1"><span class="Apple-converted-space">      </span>/* Your website content goes here */</p>
+<p class="p1"><span class="Apple-converted-space">      </span>.content {</p>
+<p class="p1"><span class="Apple-converted-space">        </span>position: relative;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>z-index: 1;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>padding: 20px;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>color: #fff;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/style&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;/head&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;body&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;!-- Your website's content --&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="content"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;h1&gt;Welcome to My Website&lt;/h1&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;p&gt;This website uses an animated p5.js sketch as the background.&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;p&gt;You can add any content here and it will appear on top of the animation.&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;script&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>// =============================</p>
+<p class="p1"><span class="Apple-converted-space">      </span>// p5.js Sketch (Simplified Example)</p>
+<p class="p1"><span class="Apple-converted-space">      </span>// =============================</p>
+<p class="p1"><span class="Apple-converted-space">      </span>// Replace this with your full sketch code if desired.</p>
+<p class="p2"><span class="Apple-converted-space">      </span></p>
+<p class="p1"><span class="Apple-converted-space">      </span>let gridSize = 400;<span class="Apple-converted-space">        </span>// Overall grid size</p>
+<p class="p1"><span class="Apple-converted-space">      </span>let numCells = 20; <span class="Apple-converted-space">        </span>// Number of cells per side</p>
+<p class="p1"><span class="Apple-converted-space">      </span>let cellSize = gridSize / numCells;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>let time = 0.0;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>let rotationY = 0.0;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>let waveAmplitude = 50.0;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>let waveFrequency = 0.5;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>let rotationSpeedY = 0.005;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>let scaleAmount = 0.2;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>let waveSpeed = 1.5;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>let points = [];</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">      </span>function setup() {</p>
+<p class="p1"><span class="Apple-converted-space">        </span>createCanvas(windowWidth, windowHeight, WEBGL);</p>
+<p class="p1"><span class="Apple-converted-space">        </span>colorMode(HSB, 360, 100, 100);</p>
+<p class="p1"><span class="Apple-converted-space">        </span>// Initialize grid points</p>
+<p class="p1"><span class="Apple-converted-space">        </span>for (let i = 0; i &lt;= numCells; i++) {</p>
+<p class="p1"><span class="Apple-converted-space">          </span>points[i] = [];</p>
+<p class="p1"><span class="Apple-converted-space">          </span>for (let j = 0; j &lt;= numCells; j++) {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>points[i][j] = createVector(0, 0, 0);</p>
+<p class="p1"><span class="Apple-converted-space">          </span>}</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p1"><span class="Apple-converted-space">      </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">      </span>function draw() {</p>
+<p class="p1"><span class="Apple-converted-space">        </span>background(0, 0, 10); // Dark background using HSB (low brightness)</p>
+<p class="p1"><span class="Apple-converted-space">        </span>time += 0.016;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>rotationY += rotationSpeedY;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>rotateY(rotationY);</p>
+<p class="p1"><span class="Apple-converted-space">        </span>let centerOffset = gridSize / 2.0;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>// Update grid vertices using a wave effect</p>
+<p class="p1"><span class="Apple-converted-space">        </span>for (let i = 0; i &lt;= numCells; i++) {</p>
+<p class="p1"><span class="Apple-converted-space">          </span>for (let j = 0; j &lt;= numCells; j++) {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>let baseX = i * cellSize - centerOffset;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>let baseY = j * cellSize - centerOffset;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>let z = waveAmplitude *<span class="Apple-converted-space"> </span></p>
+<p class="p1"><span class="Apple-converted-space">                    </span>(sin(baseX * waveFrequency * 0.1 + time * waveSpeed) +</p>
+<p class="p1"><span class="Apple-converted-space">                     </span>cos(baseY * waveFrequency * 0.1 - time * waveSpeed * 0.7)) / 2.0;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>points[i][j].set(baseX, baseY, z);</p>
+<p class="p1"><span class="Apple-converted-space">          </span>}</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p1"><span class="Apple-converted-space">        </span>// Dynamic stroke color that cycles over time</p>
+<p class="p1"><span class="Apple-converted-space">        </span>let hueVal = (millis() / 10) % 360;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>stroke(hueVal, 80, 100);</p>
+<p class="p1"><span class="Apple-converted-space">        </span>strokeWeight(1.5);</p>
+<p class="p1"><span class="Apple-converted-space">        </span>noFill();</p>
+<p class="p1"><span class="Apple-converted-space">        </span>// Draw horizontal grid lines</p>
+<p class="p1"><span class="Apple-converted-space">        </span>for (let j = 0; j &lt;= numCells; j++) {</p>
+<p class="p1"><span class="Apple-converted-space">          </span>beginShape();</p>
+<p class="p1"><span class="Apple-converted-space">          </span>for (let i = 0; i &lt;= numCells; i++) {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>let pt = points[i][j];</p>
+<p class="p1"><span class="Apple-converted-space">            </span>vertex(pt.x, pt.y, pt.z);</p>
+<p class="p1"><span class="Apple-converted-space">          </span>}</p>
+<p class="p1"><span class="Apple-converted-space">          </span>endShape();</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p1"><span class="Apple-converted-space">        </span>// Draw vertical grid lines</p>
+<p class="p1"><span class="Apple-converted-space">        </span>for (let i = 0; i &lt;= numCells; i++) {</p>
+<p class="p1"><span class="Apple-converted-space">          </span>beginShape();</p>
+<p class="p1"><span class="Apple-converted-space">          </span>for (let j = 0; j &lt;= numCells; j++) {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>let pt = points[i][j];</p>
+<p class="p1"><span class="Apple-converted-space">            </span>vertex(pt.x, pt.y, pt.z);</p>
+<p class="p1"><span class="Apple-converted-space">          </span>}</p>
+<p class="p1"><span class="Apple-converted-space">          </span>endShape();</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p1"><span class="Apple-converted-space">      </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">      </span>// Handle resizing the canvas when the window size changes</p>
+<p class="p1"><span class="Apple-converted-space">      </span>function windowResized() {</p>
+<p class="p1"><span class="Apple-converted-space">        </span>resizeCanvas(windowWidth, windowHeight);</p>
+<p class="p1"><span class="Apple-converted-space">      </span>}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/script&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;/body&gt;</p>
+<p class="p1">&lt;/html&gt;</p>
+</body>
+</html>
