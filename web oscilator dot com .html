@@ -1,136 +1,737 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
-<html>
-<head>
-  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-  <meta http-equiv="Content-Style-Type" content="text/css">
-  <title></title>
-  <meta name="Generator" content="Cocoa HTML Writer">
-  <meta name="CocoaVersion" content="2113.4">
-  <style type="text/css">
-    p.p1 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica}
-    p.p2 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica; min-height: 14.0px}
-  </style>
-</head>
-<body>
-<p class="p1">&lt;!DOCTYPE html&gt;</p>
-<p class="p1">&lt;html lang="en"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;head&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;meta charset="UTF-8" /&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;title&gt;Animated Background Website&lt;/title&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;!-- Include the p5.js and p5.sound libraries --&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/p5.min.js"&gt;&lt;/script&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/addons/p5.sound.min.js"&gt;&lt;/script&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;style&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>/* Remove default margins/padding */</p>
-<p class="p1"><span class="Apple-converted-space">      </span>html, body {</p>
-<p class="p1"><span class="Apple-converted-space">        </span>margin: 0;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>padding: 0;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>overflow: hidden;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>height: 100%;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>background-color: #000;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>font-family: Arial, sans-serif;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>}</p>
-<p class="p1"><span class="Apple-converted-space">      </span>/* This will style the p5.js canvas to cover the full screen and stay fixed behind content */</p>
-<p class="p1"><span class="Apple-converted-space">      </span>#defaultCanvas0 {</p>
-<p class="p1"><span class="Apple-converted-space">        </span>position: fixed;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>top: 0;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>left: 0;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>z-index: -1;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>}</p>
-<p class="p1"><span class="Apple-converted-space">      </span>/* Your website content goes here */</p>
-<p class="p1"><span class="Apple-converted-space">      </span>.content {</p>
-<p class="p1"><span class="Apple-converted-space">        </span>position: relative;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>z-index: 1;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>padding: 20px;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>color: #fff;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>}</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;/style&gt;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;/head&gt;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;body&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;!-- Your website's content --&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="content"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;h1&gt;Welcome to My Website&lt;/h1&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;p&gt;This website uses an animated p5.js sketch as the background.&lt;/p&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;p&gt;You can add any content here and it will appear on top of the animation.&lt;/p&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;script&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>// =============================</p>
-<p class="p1"><span class="Apple-converted-space">      </span>// p5.js Sketch (Simplified Example)</p>
-<p class="p1"><span class="Apple-converted-space">      </span>// =============================</p>
-<p class="p1"><span class="Apple-converted-space">      </span>// Replace this with your full sketch code if desired.</p>
-<p class="p2"><span class="Apple-converted-space">      </span></p>
-<p class="p1"><span class="Apple-converted-space">      </span>let gridSize = 400;<span class="Apple-converted-space">        </span>// Overall grid size</p>
-<p class="p1"><span class="Apple-converted-space">      </span>let numCells = 20; <span class="Apple-converted-space">        </span>// Number of cells per side</p>
-<p class="p1"><span class="Apple-converted-space">      </span>let cellSize = gridSize / numCells;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>let time = 0.0;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>let rotationY = 0.0;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>let waveAmplitude = 50.0;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>let waveFrequency = 0.5;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>let rotationSpeedY = 0.005;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>let scaleAmount = 0.2;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>let waveSpeed = 1.5;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>let points = [];</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">      </span>function setup() {</p>
-<p class="p1"><span class="Apple-converted-space">        </span>createCanvas(windowWidth, windowHeight, WEBGL);</p>
-<p class="p1"><span class="Apple-converted-space">        </span>colorMode(HSB, 360, 100, 100);</p>
-<p class="p1"><span class="Apple-converted-space">        </span>// Initialize grid points</p>
-<p class="p1"><span class="Apple-converted-space">        </span>for (let i = 0; i &lt;= numCells; i++) {</p>
-<p class="p1"><span class="Apple-converted-space">          </span>points[i] = [];</p>
-<p class="p1"><span class="Apple-converted-space">          </span>for (let j = 0; j &lt;= numCells; j++) {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>points[i][j] = createVector(0, 0, 0);</p>
-<p class="p1"><span class="Apple-converted-space">          </span>}</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p1"><span class="Apple-converted-space">      </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">      </span>function draw() {</p>
-<p class="p1"><span class="Apple-converted-space">        </span>background(0, 0, 10); // Dark background using HSB (low brightness)</p>
-<p class="p1"><span class="Apple-converted-space">        </span>time += 0.016;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>rotationY += rotationSpeedY;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>rotateY(rotationY);</p>
-<p class="p1"><span class="Apple-converted-space">        </span>let centerOffset = gridSize / 2.0;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>// Update grid vertices using a wave effect</p>
-<p class="p1"><span class="Apple-converted-space">        </span>for (let i = 0; i &lt;= numCells; i++) {</p>
-<p class="p1"><span class="Apple-converted-space">          </span>for (let j = 0; j &lt;= numCells; j++) {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>let baseX = i * cellSize - centerOffset;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>let baseY = j * cellSize - centerOffset;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>let z = waveAmplitude *<span class="Apple-converted-space"> </span></p>
-<p class="p1"><span class="Apple-converted-space">                    </span>(sin(baseX * waveFrequency * 0.1 + time * waveSpeed) +</p>
-<p class="p1"><span class="Apple-converted-space">                     </span>cos(baseY * waveFrequency * 0.1 - time * waveSpeed * 0.7)) / 2.0;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>points[i][j].set(baseX, baseY, z);</p>
-<p class="p1"><span class="Apple-converted-space">          </span>}</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p1"><span class="Apple-converted-space">        </span>// Dynamic stroke color that cycles over time</p>
-<p class="p1"><span class="Apple-converted-space">        </span>let hueVal = (millis() / 10) % 360;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>stroke(hueVal, 80, 100);</p>
-<p class="p1"><span class="Apple-converted-space">        </span>strokeWeight(1.5);</p>
-<p class="p1"><span class="Apple-converted-space">        </span>noFill();</p>
-<p class="p1"><span class="Apple-converted-space">        </span>// Draw horizontal grid lines</p>
-<p class="p1"><span class="Apple-converted-space">        </span>for (let j = 0; j &lt;= numCells; j++) {</p>
-<p class="p1"><span class="Apple-converted-space">          </span>beginShape();</p>
-<p class="p1"><span class="Apple-converted-space">          </span>for (let i = 0; i &lt;= numCells; i++) {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>let pt = points[i][j];</p>
-<p class="p1"><span class="Apple-converted-space">            </span>vertex(pt.x, pt.y, pt.z);</p>
-<p class="p1"><span class="Apple-converted-space">          </span>}</p>
-<p class="p1"><span class="Apple-converted-space">          </span>endShape();</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p1"><span class="Apple-converted-space">        </span>// Draw vertical grid lines</p>
-<p class="p1"><span class="Apple-converted-space">        </span>for (let i = 0; i &lt;= numCells; i++) {</p>
-<p class="p1"><span class="Apple-converted-space">          </span>beginShape();</p>
-<p class="p1"><span class="Apple-converted-space">          </span>for (let j = 0; j &lt;= numCells; j++) {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>let pt = points[i][j];</p>
-<p class="p1"><span class="Apple-converted-space">            </span>vertex(pt.x, pt.y, pt.z);</p>
-<p class="p1"><span class="Apple-converted-space">          </span>}</p>
-<p class="p1"><span class="Apple-converted-space">          </span>endShape();</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p1"><span class="Apple-converted-space">      </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">      </span>// Handle resizing the canvas when the window size changes</p>
-<p class="p1"><span class="Apple-converted-space">      </span>function windowResized() {</p>
-<p class="p1"><span class="Apple-converted-space">        </span>resizeCanvas(windowWidth, windowHeight);</p>
-<p class="p1"><span class="Apple-converted-space">      </span>}</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;/script&gt;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;/body&gt;</p>
-<p class="p1">&lt;/html&gt;</p>
-</body>
+<!DOCTYPE html>
+<html lang="en" data-theme="midnight">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Pixel Font Modulator</title>
+    <style>
+      :root {
+        color-scheme: light dark;
+        --font-family: "IBM Plex Mono", "Fira Code", "Courier New", monospace;
+      }
+
+      [data-theme="midnight"] {
+        --bg: #06060b;
+        --panel: rgba(14, 18, 33, 0.78);
+        --border: rgba(111, 143, 255, 0.35);
+        --text: #f0f6ff;
+        --accent: #6a7dff;
+        --muted: rgba(224, 234, 255, 0.6);
+        background: radial-gradient(circle at top, #141a33, #020206 55%);
+      }
+
+      [data-theme="sunrise"] {
+        --bg: #fff5ec;
+        --panel: rgba(255, 248, 240, 0.78);
+        --border: rgba(255, 170, 80, 0.35);
+        --text: #23150a;
+        --accent: #ff7a48;
+        --muted: rgba(68, 43, 27, 0.6);
+        background: radial-gradient(circle at top, #ffe0c7, #fff5ec 55%);
+      }
+
+      body {
+        margin: 0;
+        min-height: 100vh;
+        font-family: var(--font-family);
+        background: var(--bg);
+        color: var(--text);
+        display: grid;
+        grid-template-columns: minmax(280px, 420px) 1fr;
+        gap: clamp(1.5rem, 5vw, 3rem);
+        padding: clamp(1.5rem, 5vw, 3rem);
+        box-sizing: border-box;
+        transition: background 300ms ease;
+      }
+
+      h1 {
+        margin: 0 0 0.75rem;
+        letter-spacing: 0.1em;
+        font-size: clamp(1.6rem, 2vw, 2rem);
+        text-transform: uppercase;
+      }
+
+      p.description {
+        margin: 0 0 1.75rem;
+        color: var(--muted);
+        font-size: 0.95rem;
+        line-height: 1.55;
+      }
+
+      .panel {
+        background: var(--panel);
+        border: 1px solid var(--border);
+        border-radius: 20px;
+        padding: clamp(1.2rem, 3vw, 2rem);
+        backdrop-filter: blur(18px);
+        box-shadow: 0 20px 45px rgba(18, 21, 54, 0.35);
+      }
+
+      fieldset {
+        border: none;
+        padding: 0;
+        margin: 0 0 1.75rem;
+        display: grid;
+        gap: 1rem;
+      }
+
+      label {
+        display: flex;
+        flex-direction: column;
+        gap: 0.35rem;
+        font-size: 0.85rem;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+      }
+
+      .slider-row {
+        display: flex;
+        gap: 0.75rem;
+        align-items: center;
+      }
+
+      input[type="range"] {
+        flex: 1;
+        appearance: none;
+        height: 4px;
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.18);
+        outline: none;
+      }
+
+      input[type="range"]::-webkit-slider-thumb {
+        appearance: none;
+        width: 16px;
+        height: 16px;
+        border-radius: 50%;
+        background: var(--accent);
+        border: 2px solid rgba(0, 0, 0, 0.35);
+        cursor: pointer;
+        transition: transform 120ms ease;
+      }
+
+      input[type="range"]::-webkit-slider-thumb:hover {
+        transform: scale(1.1);
+      }
+
+      .value {
+        min-width: 2.5rem;
+        text-align: right;
+        font-variant-numeric: tabular-nums;
+      }
+
+      textarea {
+        width: 100%;
+        min-height: 6rem;
+        resize: vertical;
+        padding: 0.75rem 1rem;
+        font-family: var(--font-family);
+        font-size: 0.95rem;
+        color: var(--text);
+        background: rgba(255, 255, 255, 0.06);
+        border-radius: 14px;
+        border: 1px solid var(--border);
+        outline: none;
+      }
+
+      textarea:focus {
+        border-color: var(--accent);
+        box-shadow: 0 0 0 1px var(--accent);
+      }
+
+      .toggle {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.55rem;
+        background: rgba(255, 255, 255, 0.08);
+        border: 1px solid var(--border);
+        border-radius: 999px;
+        padding: 0.4rem 0.9rem;
+        font-size: 0.8rem;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        cursor: pointer;
+        transition: background 200ms ease;
+      }
+
+      .toggle:hover {
+        background: rgba(255, 255, 255, 0.14);
+      }
+
+      canvas {
+        width: 100%;
+        max-width: 720px;
+        background: rgba(0, 0, 0, 0.35);
+        border-radius: 18px;
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        box-shadow: inset 0 10px 35px rgba(0, 0, 0, 0.45);
+        transition: background 300ms ease, border 300ms ease;
+      }
+
+      [data-theme="sunrise"] canvas {
+        background: rgba(255, 255, 255, 0.6);
+        border-color: rgba(0, 0, 0, 0.08);
+        box-shadow: inset 0 10px 45px rgba(255, 180, 120, 0.35);
+      }
+
+      .preview-wrapper {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 1.5rem;
+      }
+
+      @media (max-width: 920px) {
+        body {
+          grid-template-columns: 1fr;
+          padding: clamp(1.2rem, 8vw, 3rem);
+        }
+
+        canvas {
+          max-width: 100%;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <aside class="panel">
+      <h1>Pixel Font Modulator</h1>
+      <p class="description">
+        Craft bespoke microtype with a responsive 5×7 pixel matrix. Modulate
+        glyph density, cadence, and color, then export crispy characters for
+        synthwave dashboards, roguelike HUDs, or experimental UI mockups.
+      </p>
+      <button class="toggle" id="themeToggle" type="button">
+        Switch Theme
+      </button>
+
+      <fieldset>
+        <label>
+          Sample Text
+          <textarea id="sampleText">PIXEL WAVES\n1234</textarea>
+        </label>
+      </fieldset>
+
+      <fieldset>
+        <label>
+          Pixel Size
+          <div class="slider-row">
+            <input id="pixelSize" type="range" min="2" max="24" value="12" />
+            <span class="value" data-for="pixelSize">12 px</span>
+          </div>
+        </label>
+        <label>
+          Grid Gap
+          <div class="slider-row">
+            <input id="gridGap" type="range" min="0" max="6" value="1" />
+            <span class="value" data-for="gridGap">1 px</span>
+          </div>
+        </label>
+        <label>
+          Character Spacing
+          <div class="slider-row">
+            <input
+              id="tracking"
+              type="range"
+              min="0"
+              max="24"
+              value="6"
+            />
+            <span class="value" data-for="tracking">6 px</span>
+          </div>
+        </label>
+        <label>
+          Line Spacing
+          <div class="slider-row">
+            <input id="leading" type="range" min="0" max="32" value="12" />
+            <span class="value" data-for="leading">12 px</span>
+          </div>
+        </label>
+        <label>
+          Hue Rotation
+          <div class="slider-row">
+            <input id="hue" type="range" min="0" max="360" value="210" />
+            <span class="value" data-for="hue">210°</span>
+          </div>
+        </label>
+        <label>
+          Background Intensity
+          <div class="slider-row">
+            <input id="bg" type="range" min="0" max="100" value="22" />
+            <span class="value" data-for="bg">22%</span>
+          </div>
+        </label>
+      </fieldset>
+    </aside>
+
+    <main class="preview-wrapper">
+      <canvas id="preview" width="620" height="320" aria-label="Pixel font preview"></canvas>
+    </main>
+
+    <script>
+      const glyphs = {
+        A: [
+          "01110",
+          "10001",
+          "10001",
+          "11111",
+          "10001",
+          "10001",
+          "10001",
+        ],
+        B: [
+          "11110",
+          "10001",
+          "11110",
+          "10001",
+          "10001",
+          "10001",
+          "11110",
+        ],
+        C: [
+          "01111",
+          "10000",
+          "10000",
+          "10000",
+          "10000",
+          "10000",
+          "01111",
+        ],
+        D: [
+          "11110",
+          "10001",
+          "10001",
+          "10001",
+          "10001",
+          "10001",
+          "11110",
+        ],
+        E: [
+          "11111",
+          "10000",
+          "11110",
+          "10000",
+          "10000",
+          "10000",
+          "11111",
+        ],
+        F: [
+          "11111",
+          "10000",
+          "11110",
+          "10000",
+          "10000",
+          "10000",
+          "10000",
+        ],
+        G: [
+          "01111",
+          "10000",
+          "10000",
+          "10111",
+          "10001",
+          "10001",
+          "01111",
+        ],
+        H: [
+          "10001",
+          "10001",
+          "11111",
+          "10001",
+          "10001",
+          "10001",
+          "10001",
+        ],
+        I: [
+          "01110",
+          "00100",
+          "00100",
+          "00100",
+          "00100",
+          "00100",
+          "01110",
+        ],
+        J: [
+          "00111",
+          "00010",
+          "00010",
+          "00010",
+          "10010",
+          "10010",
+          "01100",
+        ],
+        K: [
+          "10001",
+          "10010",
+          "11100",
+          "11000",
+          "11100",
+          "10010",
+          "10001",
+        ],
+        L: [
+          "10000",
+          "10000",
+          "10000",
+          "10000",
+          "10000",
+          "10000",
+          "11111",
+        ],
+        M: [
+          "10001",
+          "11011",
+          "10101",
+          "10101",
+          "10001",
+          "10001",
+          "10001",
+        ],
+        N: [
+          "10001",
+          "11001",
+          "10101",
+          "10011",
+          "10001",
+          "10001",
+          "10001",
+        ],
+        O: [
+          "01110",
+          "10001",
+          "10001",
+          "10001",
+          "10001",
+          "10001",
+          "01110",
+        ],
+        P: [
+          "11110",
+          "10001",
+          "10001",
+          "11110",
+          "10000",
+          "10000",
+          "10000",
+        ],
+        Q: [
+          "01110",
+          "10001",
+          "10001",
+          "10001",
+          "10101",
+          "10011",
+          "01111",
+        ],
+        R: [
+          "11110",
+          "10001",
+          "10001",
+          "11110",
+          "10100",
+          "10010",
+          "10001",
+        ],
+        S: [
+          "01111",
+          "10000",
+          "01110",
+          "00001",
+          "00001",
+          "00001",
+          "11110",
+        ],
+        T: [
+          "11111",
+          "00100",
+          "00100",
+          "00100",
+          "00100",
+          "00100",
+          "00100",
+        ],
+        U: [
+          "10001",
+          "10001",
+          "10001",
+          "10001",
+          "10001",
+          "10001",
+          "01110",
+        ],
+        V: [
+          "10001",
+          "10001",
+          "10001",
+          "10001",
+          "10001",
+          "01010",
+          "00100",
+        ],
+        W: [
+          "10001",
+          "10001",
+          "10001",
+          "10101",
+          "10101",
+          "10101",
+          "01010",
+        ],
+        X: [
+          "10001",
+          "10001",
+          "01010",
+          "00100",
+          "01010",
+          "10001",
+          "10001",
+        ],
+        Y: [
+          "10001",
+          "10001",
+          "01010",
+          "00100",
+          "00100",
+          "00100",
+          "00100",
+        ],
+        Z: [
+          "11111",
+          "00001",
+          "00010",
+          "00100",
+          "01000",
+          "10000",
+          "11111",
+        ],
+        0: [
+          "01110",
+          "10001",
+          "10011",
+          "10101",
+          "11001",
+          "10001",
+          "01110",
+        ],
+        1: [
+          "00100",
+          "01100",
+          "00100",
+          "00100",
+          "00100",
+          "00100",
+          "01110",
+        ],
+        2: [
+          "01110",
+          "10001",
+          "00001",
+          "00010",
+          "00100",
+          "01000",
+          "11111",
+        ],
+        3: [
+          "11110",
+          "00001",
+          "00001",
+          "00110",
+          "00001",
+          "00001",
+          "11110",
+        ],
+        4: [
+          "00010",
+          "00110",
+          "01010",
+          "10010",
+          "11111",
+          "00010",
+          "00010",
+        ],
+        5: [
+          "11111",
+          "10000",
+          "11110",
+          "00001",
+          "00001",
+          "10001",
+          "01110",
+        ],
+        6: [
+          "01110",
+          "10000",
+          "11110",
+          "10001",
+          "10001",
+          "10001",
+          "01110",
+        ],
+        7: [
+          "11111",
+          "00001",
+          "00010",
+          "00100",
+          "01000",
+          "01000",
+          "01000",
+        ],
+        8: [
+          "01110",
+          "10001",
+          "10001",
+          "01110",
+          "10001",
+          "10001",
+          "01110",
+        ],
+        9: [
+          "01110",
+          "10001",
+          "10001",
+          "01111",
+          "00001",
+          "00010",
+          "11100",
+        ],
+        "-": [
+          "00000",
+          "00000",
+          "00000",
+          "01110",
+          "00000",
+          "00000",
+          "00000",
+        ],
+        ":": [
+          "00000",
+          "00100",
+          "00000",
+          "00000",
+          "00000",
+          "00100",
+          "00000",
+        ],
+        " ": [
+          "00000",
+          "00000",
+          "00000",
+          "00000",
+          "00000",
+          "00000",
+          "00000",
+        ],
+      };
+
+      const controls = {
+        sampleText: document.getElementById("sampleText"),
+        pixelSize: document.getElementById("pixelSize"),
+        gridGap: document.getElementById("gridGap"),
+        tracking: document.getElementById("tracking"),
+        leading: document.getElementById("leading"),
+        hue: document.getElementById("hue"),
+        bg: document.getElementById("bg"),
+      };
+
+      const preview = document.getElementById("preview");
+      const ctx = preview.getContext("2d");
+
+      const updateValueLabel = (control) => {
+        const span = document.querySelector(`[data-for="${control.id}"]`);
+        if (!span) return;
+        let suffix = " px";
+        if (control.id === "hue") suffix = "°";
+        if (control.id === "bg") suffix = "%";
+        span.textContent = `${control.value}${suffix}`;
+      };
+
+      const render = () => {
+        const text = controls.sampleText.value.toUpperCase().split("\n");
+        const pixelSize = Number(controls.pixelSize.value);
+        const gap = Number(controls.gridGap.value);
+        const tracking = Number(controls.tracking.value);
+        const leading = Number(controls.leading.value);
+        const hue = Number(controls.hue.value);
+        const bgIntensity = Number(controls.bg.value);
+
+        const glyphWidth = 5 * pixelSize + gap * 4;
+        const glyphHeight = 7 * pixelSize + gap * 6;
+
+        const margin = 36;
+        const lines = text.length;
+        const maxChars = Math.max(...text.map((line) => line.length), 1);
+        const width = margin * 2 + maxChars * (glyphWidth + tracking) - tracking;
+        const height = margin * 2 + lines * (glyphHeight + leading) - leading;
+
+        preview.width = width;
+        preview.height = height;
+        preview.style.filter = `drop-shadow(0 30px 45px rgba(0,0,0,0.45))`;
+
+        ctx.fillStyle = `hsl(${hue}, 100%, ${bgIntensity}%)`;
+        ctx.fillRect(0, 0, width, height);
+
+        const pixelFill = `hsl(${hue}, 85%, ${Math.min(90, bgIntensity + 50)}%)`;
+        const ghostFill = `hsla(${hue}, 65%, ${Math.min(80, bgIntensity + 35)}%, 0.22)`;
+
+        text.forEach((line, lineIndex) => {
+          let cursorX = margin;
+          const cursorY = margin + lineIndex * (glyphHeight + leading);
+
+          for (const char of line) {
+            const glyph = glyphs[char] || glyphs[" "];
+
+            glyph.forEach((row, rowIndex) => {
+              for (let col = 0; col < row.length; col++) {
+                const value = row[col];
+                const x = cursorX + col * (pixelSize + gap);
+                const y = cursorY + rowIndex * (pixelSize + gap);
+
+                ctx.fillStyle = value === "1" ? pixelFill : ghostFill;
+                ctx.beginPath();
+                ctx.roundRect(x, y, pixelSize, pixelSize, pixelSize * 0.35);
+                ctx.fill();
+              }
+            });
+
+            cursorX += glyphWidth + tracking;
+          }
+        });
+      };
+
+      Object.values(controls).forEach((control) => {
+        updateValueLabel(control);
+        control.addEventListener("input", () => {
+          updateValueLabel(control);
+          render();
+        });
+      });
+
+      document.getElementById("themeToggle").addEventListener("click", () => {
+        const html = document.documentElement;
+        const nextTheme = html.getAttribute("data-theme") === "midnight" ? "sunrise" : "midnight";
+        html.setAttribute("data-theme", nextTheme);
+        render();
+      });
+
+      if (!CanvasRenderingContext2D.prototype.roundRect) {
+        CanvasRenderingContext2D.prototype.roundRect = function (x, y, w, h, r) {
+          const radius = Math.min(r, w / 2, h / 2);
+          this.beginPath();
+          this.moveTo(x + radius, y);
+          this.lineTo(x + w - radius, y);
+          this.quadraticCurveTo(x + w, y, x + w, y + radius);
+          this.lineTo(x + w, y + h - radius);
+          this.quadraticCurveTo(x + w, y + h, x + w - radius, y + h);
+          this.lineTo(x + radius, y + h);
+          this.quadraticCurveTo(x, y + h, x, y + h - radius);
+          this.lineTo(x, y + radius);
+          this.quadraticCurveTo(x, y, x + radius, y);
+          this.closePath();
+          return this;
+        };
+      }
+
+      render();
+    </script>
+  </body>
 </html>
