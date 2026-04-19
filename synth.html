@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Mini Sintetizador</title>
+  <style>
+    body { font-family: Arial, sans-serif; background: #111; color: #fff; text-align:center; }
+    #controls { margin-top: 20px; }
+    label { display: block; margin: 10px 0 5px; }
+    input[type=range] { width: 80%; }
+  </style>
+</head>
+<body>
+  <h1>Mini Sintetizador</h1>
+  <div id="controls">
+    <label>Forma de onda
+      <select id="waveType">
+        <option value="sine">Senoidal</option>
+        <option value="square">Cuadrada</option>
+        <option value="sawtooth">Diente de sierra</option>
+        <option value="triangle">Triangular</option>
+      </select>
+    </label>
+    <label>Frecuencia: <span id="freqVal">440</span> Hz
+      <input type="range" id="frequency" min="50" max="2000" value="440" />
+    </label>
+    <label>Volumen: <span id="volVal">0.5</span>
+      <input type="range" id="volume" min="0" max="1" step="0.01" value="0.5" />
+    </label>
+    <button id="startBtn">Iniciar</button>
+    <button id="stopBtn" disabled>Detener</button>
+  </div>
+
+  <script>
+    let audioCtx;
+    let oscillator;
+    let gainNode;
+
+    const waveType = document.getElementById('waveType');
+    const freqSlider = document.getElementById('frequency');
+    const volSlider = document.getElementById('volume');
+    const startBtn = document.getElementById('startBtn');
+    const stopBtn = document.getElementById('stopBtn');
+    const freqVal = document.getElementById('freqVal');
+    const volVal = document.getElementById('volVal');
+
+    function initAudio() {
+      if (!audioCtx) {
+        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        oscillator = audioCtx.createOscillator();
+        gainNode = audioCtx.createGain();
+
+        oscillator.type = waveType.value;
+        oscillator.frequency.setValueAtTime(parseFloat(freqSlider.value), audioCtx.currentTime);
+        gainNode.gain.setValueAtTime(parseFloat(volSlider.value), audioCtx.currentTime);
+
+        oscillator.connect(gainNode).connect(audioCtx.destination);
+      }
+    }
+
+    startBtn.addEventListener('click', () => {
+      initAudio();
+      oscillator.start();
+      startBtn.disabled = true;
+      stopBtn.disabled = false;
+    });
+
+    stopBtn.addEventListener('click', () => {
+      oscillator.stop();
+      audioCtx.close();
+      audioCtx = null;
+      startBtn.disabled = false;
+      stopBtn.disabled = true;
+    });
+
+    waveType.addEventListener('change', () => {
+      if (oscillator) {
+        oscillator.type = waveType.value;
+      }
+    });
+
+    freqSlider.addEventListener('input', () => {
+      freqVal.textContent = freqSlider.value;
+      if (oscillator) {
+        oscillator.frequency.setValueAtTime(parseFloat(freqSlider.value), audioCtx.currentTime);
+      }
+    });
+
+    volSlider.addEventListener('input', () => {
+      volVal.textContent = volSlider.value;
+      if (gainNode) {
+        gainNode.gain.setValueAtTime(parseFloat(volSlider.value), audioCtx.currentTime);
+      }
+    });
+  </script>
+</body>
+</html>
