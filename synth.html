@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mini Sintetizador Digital</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #0d0f14;
+      --panel: #171b24;
+      --panel-2: #202736;
+      --accent: #6ee7ff;
+      --accent-2: #8b5cf6;
+      --text: #e9eefb;
+      --muted: #9ca5b8;
+      --danger: #ff7676;
+      --radius: 12px;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: Inter, Arial, sans-serif;
+      background: radial-gradient(circle at top, #1a2030 0%, var(--bg) 52%);
+      color: var(--text);
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      padding: 20px;
+    }
+
+    .app {
+      width: min(900px, 100%);
+      background: linear-gradient(160deg, rgba(255,255,255,0.03), rgba(255,255,255,0));
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: calc(var(--radius) + 6px);
+      padding: 20px;
+      backdrop-filter: blur(8px);
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.35);
+    }
+
+    h1 { margin: 0 0 8px; font-size: 1.6rem; }
+    .subtitle { margin: 0 0 20px; color: var(--muted); }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 16px;
+      margin-bottom: 16px;
+    }
+
+    .panel {
+      background: var(--panel);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: var(--radius);
+      padding: 14px;
+    }
+
+    label {
+      display: block;
+      font-size: 0.92rem;
+      margin-bottom: 8px;
+      color: #cfd7eb;
+    }
+
+    .value {
+      color: var(--accent);
+      font-weight: 700;
+      margin-left: 6px;
+    }
+
+    input[type="range"], select {
+      width: 100%;
+      margin-top: 6px;
+    }
+
+    select {
+      background: var(--panel-2);
+      color: var(--text);
+      border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 8px;
+      padding: 8px;
+    }
+
+    .buttons {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-top: 8px;
+    }
+
+    button {
+      border: 0;
+      border-radius: 10px;
+      padding: 10px 12px;
+      font-weight: 700;
+      color: #00131a;
+      background: var(--accent);
+      cursor: pointer;
+      transition: transform 120ms ease, opacity 120ms ease;
+    }
+
+    button:active { transform: scale(0.98); }
+    button:hover:not(:disabled) { opacity: 0.92; }
+    button:disabled { opacity: 0.45; cursor: not-allowed; }
+
+    .danger {
+      background: var(--danger);
+      color: #2d0000;
+    }
+
+    .notes {
+      margin-top: 18px;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(85px, 1fr));
+      gap: 8px;
+    }
+
+    .note {
+      min-height: 56px;
+      background: linear-gradient(170deg, #e5e7eb, #cfd2da);
+      color: #111827;
+      border: 1px solid #9da7ba;
+    }
+
+    .note.active {
+      background: linear-gradient(170deg, #9ff3ff, #78d5ff);
+    }
+
+    .status {
+      margin-top: 14px;
+      font-size: 0.95rem;
+      color: var(--muted);
+      min-height: 1.2em;
+    }
+
+    code {
+      background: rgba(255,255,255,0.08);
+      padding: 2px 6px;
+      border-radius: 6px;
+      color: #d4f7ff;
+    }
+  </style>
+</head>
+<body>
+  <main class="app">
+    <h1>Mini Sintetizador Digital 🎛️</h1>
+    <p class="subtitle">Proyecto base para aprender síntesis: oscilador + ganancia + filtro + envolvente.</p>
+
+    <section class="grid">
+      <div class="panel">
+        <label>
+          Forma de onda
+          <select id="waveType">
+            <option value="sine">Senoidal (suave)</option>
+            <option value="square">Cuadrada (agresiva)</option>
+            <option value="sawtooth">Diente de sierra (brillante)</option>
+            <option value="triangle">Triangular (cálida)</option>
+          </select>
+        </label>
+
+        <label>
+          Volumen maestro
+          <span id="volumeValue" class="value">0.35</span>
+          <input type="range" id="volume" min="0" max="1" step="0.01" value="0.35" />
+        </label>
+
+        <label>
+          Cutoff de filtro (Hz)
+          <span id="cutoffValue" class="value">1600</span>
+          <input type="range" id="cutoff" min="100" max="5000" step="10" value="1600" />
+        </label>
+      </div>
+
+      <div class="panel">
+        <label>
+          Attack (seg)
+          <span id="attackValue" class="value">0.02</span>
+          <input type="range" id="attack" min="0.001" max="1" step="0.001" value="0.02" />
+        </label>
+
+        <label>
+          Release (seg)
+          <span id="releaseValue" class="value">0.2</span>
+          <input type="range" id="release" min="0.01" max="2" step="0.01" value="0.2" />
+        </label>
+
+        <div class="buttons">
+          <button id="enableAudioBtn">Activar audio</button>
+          <button id="panicBtn" class="danger">Silencio total</button>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <p>Notas (mouse o teclado): <code>A S D F G H J</code></p>
+      <div class="notes" id="noteButtons"></div>
+      <p class="status" id="status">Haz clic en <strong>Activar audio</strong> para comenzar.</p>
+    </section>
+  </main>
+
+  <script>
+    const NOTES = [
+      { name: 'C4', freq: 261.63, key: 'a' },
+      { name: 'D4', freq: 293.66, key: 's' },
+      { name: 'E4', freq: 329.63, key: 'd' },
+      { name: 'F4', freq: 349.23, key: 'f' },
+      { name: 'G4', freq: 392.00, key: 'g' },
+      { name: 'A4', freq: 440.00, key: 'h' },
+      { name: 'B4', freq: 493.88, key: 'j' }
+    ];
+
+    const waveTypeEl = document.getElementById('waveType');
+    const volumeEl = document.getElementById('volume');
+    const cutoffEl = document.getElementById('cutoff');
+    const attackEl = document.getElementById('attack');
+    const releaseEl = document.getElementById('release');
+
+    const volumeValue = document.getElementById('volumeValue');
+    const cutoffValue = document.getElementById('cutoffValue');
+    const attackValue = document.getElementById('attackValue');
+    const releaseValue = document.getElementById('releaseValue');
+    const statusEl = document.getElementById('status');
+
+    const enableAudioBtn = document.getElementById('enableAudioBtn');
+    const panicBtn = document.getElementById('panicBtn');
+    const noteButtonsWrap = document.getElementById('noteButtons');
+
+    let audioCtx = null;
+    let masterGain = null;
+    let lowpass = null;
+    const activeNotes = new Map();
+
+    function updateValueLabels() {
+      volumeValue.textContent = Number(volumeEl.value).toFixed(2);
+      cutoffValue.textContent = Number(cutoffEl.value).toFixed(0);
+      attackValue.textContent = Number(attackEl.value).toFixed(3);
+      releaseValue.textContent = Number(releaseEl.value).toFixed(2);
+    }
+
+    function setStatus(text) {
+      statusEl.innerHTML = text;
+    }
+
+    function initAudio() {
+      if (audioCtx) return;
+
+      audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      masterGain = audioCtx.createGain();
+      lowpass = audioCtx.createBiquadFilter();
+
+      lowpass.type = 'lowpass';
+      lowpass.frequency.value = Number(cutoffEl.value);
+      masterGain.gain.value = Number(volumeEl.value);
+
+      lowpass.connect(masterGain);
+      masterGain.connect(audioCtx.destination);
+
+      setStatus('Audio activo. Toca una nota con los botones o con el teclado.');
+      enableAudioBtn.disabled = true;
+    }
+
+    function createNoteButton(note) {
+      const btn = document.createElement('button');
+      btn.className = 'note';
+      btn.dataset.note = note.name;
+      btn.innerHTML = `${note.name}<br><small>${note.key.toUpperCase()}</small>`;
+
+      btn.addEventListener('mousedown', () => noteOn(note));
+      btn.addEventListener('mouseup', () => noteOff(note));
+      btn.addEventListener('mouseleave', () => noteOff(note));
+      btn.addEventListener('touchstart', (e) => {
+        e.preventDefault();
+        noteOn(note);
+      }, { passive: false });
+      btn.addEventListener('touchend', (e) => {
+        e.preventDefault();
+        noteOff(note);
+      });
+
+      noteButtonsWrap.appendChild(btn);
+    }
+
+    function noteOn(note) {
+      if (!audioCtx) return;
+      if (activeNotes.has(note.name)) return;
+
+      const now = audioCtx.currentTime;
+      const osc = audioCtx.createOscillator();
+      const noteGain = audioCtx.createGain();
+
+      osc.type = waveTypeEl.value;
+      osc.frequency.setValueAtTime(note.freq, now);
+      noteGain.gain.setValueAtTime(0, now);
+      noteGain.gain.linearRampToValueAtTime(1, now + Number(attackEl.value));
+
+      osc.connect(noteGain);
+      noteGain.connect(lowpass);
+      osc.start(now);
+
+      activeNotes.set(note.name, { osc, noteGain });
+      highlightNote(note.name, true);
+      setStatus(`Sonando: <strong>${note.name}</strong> (${note.freq.toFixed(2)} Hz)`);
+    }
+
+    function noteOff(note) {
+      if (!audioCtx) return;
+
+      const node = activeNotes.get(note.name);
+      if (!node) return;
+
+      const now = audioCtx.currentTime;
+      const releaseTime = Number(releaseEl.value);
+      node.noteGain.gain.cancelScheduledValues(now);
+      node.noteGain.gain.setValueAtTime(node.noteGain.gain.value, now);
+      node.noteGain.gain.linearRampToValueAtTime(0.0001, now + releaseTime);
+      node.osc.stop(now + releaseTime + 0.02);
+
+      activeNotes.delete(note.name);
+      highlightNote(note.name, false);
+      if (activeNotes.size === 0) {
+        setStatus('Sin notas activas.');
+      }
+    }
+
+    function highlightNote(name, isActive) {
+      const button = noteButtonsWrap.querySelector(`[data-note="${name}"]`);
+      if (!button) return;
+      button.classList.toggle('active', isActive);
+    }
+
+    function panic() {
+      for (const [name, node] of activeNotes.entries()) {
+        try {
+          node.osc.stop();
+        } catch (_) {
+          // Oscillator might have already stopped.
+        }
+        highlightNote(name, false);
+      }
+      activeNotes.clear();
+      setStatus('Todos los osciladores detenidos.');
+    }
+
+    enableAudioBtn.addEventListener('click', async () => {
+      initAudio();
+      if (audioCtx && audioCtx.state === 'suspended') {
+        await audioCtx.resume();
+      }
+    });
+
+    panicBtn.addEventListener('click', panic);
+
+    volumeEl.addEventListener('input', () => {
+      updateValueLabels();
+      if (masterGain) {
+        masterGain.gain.setTargetAtTime(Number(volumeEl.value), audioCtx.currentTime, 0.01);
+      }
+    });
+
+    cutoffEl.addEventListener('input', () => {
+      updateValueLabels();
+      if (lowpass) {
+        lowpass.frequency.setTargetAtTime(Number(cutoffEl.value), audioCtx.currentTime, 0.02);
+      }
+    });
+
+    attackEl.addEventListener('input', updateValueLabels);
+    releaseEl.addEventListener('input', updateValueLabels);
+
+    window.addEventListener('keydown', (e) => {
+      if (e.repeat) return;
+      const note = NOTES.find((n) => n.key === e.key.toLowerCase());
+      if (note) noteOn(note);
+    });
+
+    window.addEventListener('keyup', (e) => {
+      const note = NOTES.find((n) => n.key === e.key.toLowerCase());
+      if (note) noteOff(note);
+    });
+
+    NOTES.forEach(createNoteButton);
+    updateValueLabels();
+  </script>
+</body>
+</html>
